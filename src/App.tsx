@@ -1,23 +1,24 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "./components/Header";
 import { MainPage } from "./components/MainPage";
-import { PizzaList } from "./components/PizzaList";
-import { DessertsList } from "./components/DessertsList";
-import { SodaList } from "./components/SodaList";
 import { Footer } from "./components/Footer";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { PizzaMenu } from "./components/PizzaMenu";
 
 function App() {
   return (
-    <div className="bg-[#f5f5f5] min-h-screen">
+    <BrowserRouter>
       <Header />
-      <div className="my-10">
-        <MainPage />
-      </div>
-      <PizzaList />
-      <DessertsList />
-      <SodaList />
+      <main className="bg-[#f5f5f5] min-h-screen">
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/pizza" element={<PizzaMenu />} />
+          {/* <Route path="/desserts" element={<DessertsMenu />} />
+            <Route path="/drinks" element={<DrinksMenu />} /> */}
+        </Routes>
+      </main>
       <Footer />
-    </div>
+    </BrowserRouter>
   );
 }
 
