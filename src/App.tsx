@@ -3,7 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Header } from "./components/Header";
 import { MainPage } from "./components/MainPage";
 import { Footer } from "./components/Footer";
-import { PizzaMenu } from "./components/PizzaMenu";
+import { PizzaMenu } from "./components/Menu/PizzaMenu";
+import { DessertsMenu } from "./components/Menu/DessertsMenu";
+import { DrinksMenu } from "./components/Menu/DrinksMenu";
+import { FavoritePage } from "./components/FavoritePage";
 
 function App() {
   return (
@@ -13,8 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/pizza" element={<PizzaMenu />} />
-          {/* <Route path="/desserts" element={<DessertsMenu />} />
-            <Route path="/drinks" element={<DrinksMenu />} /> */}
+          <Route path="/desserts" element={<DessertsMenu />} />
+          <Route path="/drinks" element={<DrinksMenu />} />
+          <Route path="/favorite" element={<FavoritePage />} />
         </Routes>
       </main>
       <Footer />

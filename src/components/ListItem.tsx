@@ -9,7 +9,9 @@ interface ListItemProps {
 }
 
 export const ListItem = ({ item }: ListItemProps) => {
-  const liked = useFavoriteStore((state) => state.favorites.includes(item.id));
+  const liked = useFavoriteStore((state) =>
+    state.favorites.some((fav) => fav.id === item.id),
+  );
 
   const toggleFavorite = useFavoriteStore((state) => state.toggleFavorite);
 
@@ -22,7 +24,7 @@ export const ListItem = ({ item }: ListItemProps) => {
           </span>
         )}
         <IconButton
-          onClick={() => toggleFavorite(item.id)}
+          onClick={() => toggleFavorite(item)}
           sx={{
             position: "absolute",
             top: 2,
