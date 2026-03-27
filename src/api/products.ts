@@ -17,6 +17,8 @@ import Soda16 from "../assets/Soda16.png";
 import Soda17 from "../assets/Soda17.png";
 import Soda18 from "../assets/Soda18.png";
 
+type Category = "pizza" | "desserts" | "drinks";
+
 export interface ListItemData {
   id: number;
   img: string;
@@ -24,11 +26,13 @@ export interface ListItemData {
   ingredients?: string;
   price: number;
   discount: number;
+  category: Category;
 }
 
 const pizzas: ListItemData[] = [
   {
     id: 1,
+    category: "pizza",
     img: Pizza1,
     name: "Spinach & Tomato",
     ingredients: "mozzarella cheese, cherry tomatoes, spinach",
@@ -37,6 +41,7 @@ const pizzas: ListItemData[] = [
   },
   {
     id: 2,
+    category: "pizza",
     img: Pizza2,
     name: "Herb Chicken",
     ingredients: "mozzarella cheese, chicken, parsley",
@@ -45,6 +50,7 @@ const pizzas: ListItemData[] = [
   },
   {
     id: 3,
+    category: "pizza",
     img: Pizza3,
     name: "Chicken Pepperoni",
     ingredients: "mozzarella cheese, chicken, pepperoni, bell pepper",
@@ -53,6 +59,7 @@ const pizzas: ListItemData[] = [
   },
   {
     id: 4,
+    category: "pizza",
     img: Pizza4,
     name: "Sweet & Sour Chicken",
     ingredients: "mozzarella cheese, chicken, sweet and sour sauce, parsley",
@@ -61,6 +68,7 @@ const pizzas: ListItemData[] = [
   },
   {
     id: 5,
+    category: "pizza",
     img: Pizza5,
     name: "Hawaiian",
     ingredients: "mozzarella cheese, pineapple",
@@ -69,6 +77,7 @@ const pizzas: ListItemData[] = [
   },
   {
     id: 6,
+    category: "pizza",
     img: Pizza6,
     name: "Chicken & Mushroom",
     ingredients:
@@ -81,6 +90,7 @@ const pizzas: ListItemData[] = [
 const desserts: ListItemData[] = [
   {
     id: 7,
+    category: "desserts",
     img: Cake7,
     name: "Cherry Cheesecake",
     price: 8,
@@ -88,6 +98,7 @@ const desserts: ListItemData[] = [
   },
   {
     id: 8,
+    category: "desserts",
     img: Cake8,
     name: "Red Velvet Cake",
     price: 7,
@@ -95,6 +106,7 @@ const desserts: ListItemData[] = [
   },
   {
     id: 9,
+    category: "desserts",
     img: Cake9,
     name: "Chocolate Cake",
     price: 6,
@@ -102,6 +114,7 @@ const desserts: ListItemData[] = [
   },
   {
     id: 10,
+    category: "desserts",
     img: Cake10,
     name: "Raspberry Tartlet",
     price: 7,
@@ -109,6 +122,7 @@ const desserts: ListItemData[] = [
   },
   {
     id: 11,
+    category: "desserts",
     img: Cake11,
     name: "Fruit Tartlet",
     price: 8,
@@ -116,6 +130,7 @@ const desserts: ListItemData[] = [
   },
   {
     id: 12,
+    category: "desserts",
     img: Cake12,
     name: "Cheesecake Tartlet",
     price: 6,
@@ -126,6 +141,7 @@ const desserts: ListItemData[] = [
 const drinks: ListItemData[] = [
   {
     id: 13,
+    category: "drinks",
     img: Soda13,
     name: "Coca Cola",
     price: 2,
@@ -133,6 +149,7 @@ const drinks: ListItemData[] = [
   },
   {
     id: 14,
+    category: "drinks",
     img: Soda14,
     name: "Coca Cola Zero",
     price: 2,
@@ -140,6 +157,7 @@ const drinks: ListItemData[] = [
   },
   {
     id: 15,
+    category: "drinks",
     img: Soda15,
     name: "Pepsi Cola",
     price: 2,
@@ -147,6 +165,7 @@ const drinks: ListItemData[] = [
   },
   {
     id: 16,
+    category: "drinks",
     img: Soda16,
     name: "Dr. Pepper",
     price: 2,
@@ -154,6 +173,7 @@ const drinks: ListItemData[] = [
   },
   {
     id: 17,
+    category: "drinks",
     img: Soda17,
     name: "Fanta",
     price: 2,
@@ -161,12 +181,15 @@ const drinks: ListItemData[] = [
   },
   {
     id: 18,
+    category: "drinks",
     img: Soda18,
     name: "Sprite",
     price: 3,
     discount: 1,
   },
 ];
+
+const allProducts = [...pizzas, ...desserts, ...drinks];
 
 export const fetchPizzas = (): Promise<ListItemData[]> => {
   return new Promise((resolve) => {
@@ -189,5 +212,23 @@ export const fetchDrinks = (): Promise<ListItemData[]> => {
     setTimeout(() => {
       resolve(drinks);
     }, 2000);
+  });
+};
+
+export const fetchProductById = (
+  id: number,
+): Promise<ListItemData | undefined> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(allProducts.find((item) => item.id === id));
+    }, 1000);
+  });
+};
+
+export const fetchByCategory = (category: Category) => {
+  return new Promise<ListItemData[]>((resolve) => {
+    setTimeout(() => {
+      resolve(allProducts.filter((item) => item.category === category));
+    }, 500);
   });
 };

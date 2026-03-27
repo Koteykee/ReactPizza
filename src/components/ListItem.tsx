@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useFavoriteStore } from "../stores/useFavoriteStore";
 import { useCartStore } from "../stores/useCartStore";
 import { IconButton } from "@mui/material";
@@ -21,84 +22,102 @@ export const ListItem = ({ item }: ListItemProps) => {
   const decrement = useCartStore((state) => state.decrement);
 
   return (
-    <div className="relative w-56 p-2 bg-white shadow-md rounded-lg overflow-hidden flex flex-col justify-between h-full">
-      <div className="flex flex-col items-center text-center">
-        {item.discount > 0 && (
-          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
-            DISCOUNT
-          </span>
-        )}
-        <IconButton
-          onClick={() => toggleFavorite(item)}
-          sx={{
-            position: "absolute",
-            top: 2,
-            right: 2,
-            zIndex: 10,
-            "&:hover": { backgroundColor: "#ffe5d1" },
-          }}
-        >
-          {liked ? (
-            <FavoriteIcon sx={{ color: "red" }} />
-          ) : (
-            <FavoriteBorderIcon sx={{ color: "gray" }} />
+    <Link
+      to={`/itemPage/${item.id}`}
+      style={{ textDecoration: "none" }}
+      className="text-black"
+    >
+      <div className="relative w-56 p-2 bg-white shadow-md rounded-lg overflow-hidden flex flex-col justify-between h-full">
+        <div className="flex flex-col items-center text-center">
+          {item.discount > 0 && (
+            <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
+              DISCOUNT
+            </span>
           )}
-        </IconButton>
-        <img
-          src={item.img}
-          alt={item.name}
-          className="w-full h-40 object-contain"
-        />
-        <p className="font-semibold text-[18px] leading-tight my-1">
-          {item.name}
-        </p>
-        {item.ingredients && (
-          <p className="text-[14px] text-gray-600 my-0">{item.ingredients}</p>
-        )}
-      </div>
-      <div className="flex items-end justify-evenly">
-        <div className="flex flex-col leading-tight">
-          <p className="text-[15px] text-gray-600 my-1">Price:</p>
-          {item.discount > 0 ? (
-            <>
-              <p className="text-gray-400 line-through text-[16px] my-0">
-                {item.price}$
-              </p>
-              <p className="text-red-500 font-bold text-[20px] my-0">
-                {item.price - item.discount}$
-              </p>
-            </>
-          ) : (
-            <p className="font-bold text-[20px] my-1">{item.price}$</p>
+          <IconButton
+            onClick={(e) => {
+              e.preventDefault();
+              toggleFavorite(item);
+            }}
+            sx={{
+              position: "absolute",
+              top: 2,
+              right: 2,
+              zIndex: 10,
+              "&:hover": { backgroundColor: "#ffe5d1" },
+            }}
+          >
+            {liked ? (
+              <FavoriteIcon sx={{ color: "red" }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: "gray" }} />
+            )}
+          </IconButton>
+          <img
+            src={item.img}
+            alt={item.name}
+            className="w-full h-40 object-contain"
+          />
+          <p className="font-semibold text-[18px] leading-tight my-1">
+            {item.name}
+          </p>
+          {item.ingredients && (
+            <p className="text-[14px] text-gray-600 my-0">{item.ingredients}</p>
           )}
         </div>
-        {cartItem?.quantity > 0 ? (
-          <div className="flex items-center border rounded overflow-hidden w-31.5 h-10">
-            <button
-              onClick={() => decrement(item.id)}
-              className="h-full w-10.5 bg-[#ec992c] hover:bg-[#fab75f]"
-            >
-              <span className="text-2xl font-bold leading-none">−</span>
-            </button>
-            <span className="text-[18px] text-center w-10.5 font-bold">
-              {cartItem.quantity}
-            </span>
-            <button
-              onClick={() => increment(item.id)}
-              className="h-full w-10.5 bg-[#ec992c] hover:bg-[#fab75f]"
-            >
-              <span className="text-2xl font-bold leading-none">+</span>
-            </button>
+        <div className="flex items-end justify-evenly">
+          <div className="flex flex-col leading-tight">
+            <p className="text-[15px] text-gray-600 my-1">Price:</p>
+            {item.discount > 0 ? (
+              <>
+                <p className="text-gray-400 line-through text-[16px] my-0">
+                  {item.price}$
+                </p>
+                <p className="text-red-500 font-bold text-[20px] my-0">
+                  {item.price - item.discount}$
+                </p>
+              </>
+            ) : (
+              <p className="font-bold text-[20px] my-1">{item.price}$</p>
+            )}
           </div>
-        ) : (
-          <button
-            onClick={() => addToCart(item)}
-            className="bg-[#f07e20] hover:bg-[#ffa734] text-white text-[16px] py-2 px-3 w-31.5 rounded cursor-pointer transition-colors"
-          >
-            Add to cart
-          </button>
-        )}
+          {cartItem?.quantity > 0 ? (
+            <div className="flex items-center border rounded overflow-hidden w-31.5 h-10">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  decrement(item.id);
+                }}
+                className="h-full w-10.5 bg-[#ec992c] hover:bg-[#fab75f]"
+              >
+                <span className="text-2xl font-bold leading-none">−</span>
+              </button>
+              <span className="text-[18px] text-center w-10.5 font-bold">
+                {cartItem.quantity}
+              </span>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  increment(item.id);
+                }}
+                className="h-full w-10.5 bg-[#ec992c] hover:bg-[#fab75f]"
+              >
+                <span className="text-2xl font-bold leading-none">+</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                addToCart(item);
+              }}
+              className="bg-[#f07e20] hover:bg-[#ffa734] text-white text-[16px] py-2 px-3 w-31.5 rounded cursor-pointer transition-colors"
+            >
+              Add to cart
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
