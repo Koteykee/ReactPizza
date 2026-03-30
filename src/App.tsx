@@ -2,14 +2,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { Header } from "./components/Header/Header";
-import { MainPage } from "./components/MainPage";
+import { MainPage } from "./components/MainPage/MainPage";
 import { Footer } from "./components/Footer";
 import { PizzaMenu } from "./components/Menu/PizzaMenu";
 import { DessertsMenu } from "./components/Menu/DessertsMenu";
 import { DrinksMenu } from "./components/Menu/DrinksMenu";
 import { ItemPage } from "./components/ItemPage";
 import { FavoritePage } from "./components/FavoritePage";
-import { CartPage } from "./components/CartPage";
+import { CartPage } from "./components/Cart/CartPage";
 
 function App() {
   return (

@@ -1,5 +1,5 @@
 import { useFavoriteStore } from "../stores/useFavoriteStore";
-import { List } from "./List";
+import { List } from "./MainPage/List/List";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export const FavoritePage = () => {
@@ -7,8 +7,8 @@ export const FavoritePage = () => {
   const clearFavorites = useFavoriteStore((state) => state.clearFavorites);
 
   return (
-    <div className="pt-10">
-      <div className="container flex items-center justify-between mb-4">
+    <div className="container">
+      <div className="pt-10 mx-3 flex items-center justify-between mb-4">
         {favorite.length > 0 ? (
           <>
             <h2 className="text-2xl font-bold">Your favorites</h2>

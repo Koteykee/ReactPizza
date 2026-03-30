@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { useFavoriteStore } from "../stores/useFavoriteStore";
-import { useCartStore } from "../stores/useCartStore";
+import { useFavoriteStore } from "../../../stores/useFavoriteStore";
+import { useCartStore } from "../../../stores/useCartStore";
 import { IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import type { ListItemData } from "../api/products";
+import type { ListItemData } from "../../../api/products";
 
 interface ListItemProps {
   item: ListItemData;

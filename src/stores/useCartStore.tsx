@@ -9,8 +9,10 @@ interface CartItem {
 interface CartStore {
   cart: Record<number, CartItem>;
   addToCart: (item: ListItemData) => void;
+  removeFromCart: (itemId: number) => void;
   increment: (itemId: number) => void;
   decrement: (itemId: number) => void;
+  clearCart: () => void;
 }
 
 const CART_KEY = "cart";
@@ -33,6 +35,18 @@ export const useCartStore = create<CartStore>((set) => ({
       return { cart: newCart };
     }),
 
+  removeFromCart: (itemId) =>
+    set((state) => {
+      const newCart = { ...state.cart };
+
+      if (!newCart[itemId]) return state;
+
+      delete newCart[itemId];
+
+      localStorage.setItem(CART_KEY, JSON.stringify(newCart));
+      return { cart: newCart };
+    }),
+
   increment: (itemId) =>
     set((state) => {
       const newCart = { ...state.cart };
@@ -52,12 +66,20 @@ export const useCartStore = create<CartStore>((set) => ({
       if (!newCart[itemId]) return state;
 
       const newQuantity = newCart[itemId].quantity - 1;
-      if (newQuantity <= 0) {
-        delete newCart[itemId];
-      } else {
+
+      if (newQuantity > 0) {
         newCart[itemId] = { ...newCart[itemId], quantity: newQuantity };
+      } else {
+        delete newCart[itemId];
       }
-      localStorage.setItem("cart", JSON.stringify(newCart));
+
+      localStorage.setItem(CART_KEY, JSON.stringify(newCart));
       return { cart: newCart };
+    }),
+
+  clearCart: () =>
+    set(() => {
+      localStorage.setItem(CART_KEY, JSON.stringify({}));
+      return { cart: {} };
     }),
 }));

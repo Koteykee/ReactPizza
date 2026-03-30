@@ -10,12 +10,13 @@ import { useFavoriteStore } from "../stores/useFavoriteStore";
 import { IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { List } from "./List";
+import { List } from "./MainPage/List/List";
 
 export const ItemPage = () => {
   const { id } = useParams();
   const [item, setItem] = useState<ListItemData | null>(null);
   const cartItem = useCartStore((state) => state.cart[Number(id)]);
+  const quantity = cartItem?.quantity ?? 0;
   const addToCart = useCartStore((state) => state.addToCart);
   const increment = useCartStore((state) => state.increment);
   const decrement = useCartStore((state) => state.decrement);
@@ -73,7 +74,7 @@ export const ItemPage = () => {
                 <p className="font-bold text-[20px] my-1">{item.price}$</p>
               )}
             </div>
-            {cartItem?.quantity > 0 ? (
+            {quantity > 0 ? (
               <div className="flex items-center border rounded overflow-hidden w-31.5 h-10">
                 <button
                   onClick={(e) => {
@@ -85,7 +86,7 @@ export const ItemPage = () => {
                   <span className="text-2xl font-bold leading-none">−</span>
                 </button>
                 <span className="text-[18px] text-center w-10.5 font-bold">
-                  {cartItem.quantity}
+                  {quantity}
                 </span>
                 <button
                   onClick={(e) => {

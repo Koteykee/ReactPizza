@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchDrinks, type ListItemData } from "../api/products";
-import { List } from "./List";
+import { fetchDrinks, type ListItemData } from "../../api/products";
+import { List } from "./List/List";
 
 export const DrinksList = () => {
   const [drinks, setDrinks] = useState<ListItemData[]>([]);

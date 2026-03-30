@@ -1,4 +1,4 @@
-import type { ListItemData } from "../api/products";
+import type { ListItemData } from "../../../api/products";
 import { ListItem } from "./ListItem";
 
 interface ListProps {
