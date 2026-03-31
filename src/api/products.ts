@@ -21,12 +21,13 @@ type Category = "pizza" | "desserts" | "drinks";
 
 export interface ListItemData {
   id: number;
+  category: Category;
   img: string;
   name: string;
   ingredients?: string;
+  size: string;
   price: number;
   discount: number;
-  category: Category;
 }
 
 const pizzas: ListItemData[] = [
@@ -36,6 +37,7 @@ const pizzas: ListItemData[] = [
     img: Pizza1,
     name: "Spinach & Tomato",
     ingredients: "mozzarella cheese, cherry tomatoes, spinach",
+    size: "750 g",
     price: 18,
     discount: 0,
   },
@@ -45,6 +47,7 @@ const pizzas: ListItemData[] = [
     img: Pizza2,
     name: "Herb Chicken",
     ingredients: "mozzarella cheese, chicken, parsley",
+    size: "750 g",
     price: 20,
     discount: 2,
   },
@@ -54,6 +57,7 @@ const pizzas: ListItemData[] = [
     img: Pizza3,
     name: "Chicken Pepperoni",
     ingredients: "mozzarella cheese, chicken, pepperoni, bell pepper",
+    size: "750 g",
     price: 22,
     discount: 0,
   },
@@ -63,6 +67,7 @@ const pizzas: ListItemData[] = [
     img: Pizza4,
     name: "Sweet & Sour Chicken",
     ingredients: "mozzarella cheese, chicken, sweet and sour sauce, parsley",
+    size: "750 g",
     price: 22,
     discount: 2,
   },
@@ -72,6 +77,7 @@ const pizzas: ListItemData[] = [
     img: Pizza5,
     name: "Hawaiian",
     ingredients: "mozzarella cheese, pineapple",
+    size: "750 g",
     price: 16,
     discount: 0,
   },
@@ -82,6 +88,7 @@ const pizzas: ListItemData[] = [
     name: "Chicken & Mushroom",
     ingredients:
       "mozzarella cheese, chicken, mushrooms, cherry tomatoes, green onions",
+    size: "750 g",
     price: 18,
     discount: 0,
   },
@@ -93,6 +100,7 @@ const desserts: ListItemData[] = [
     category: "desserts",
     img: Cake7,
     name: "Cherry Cheesecake",
+    size: "200 g",
     price: 8,
     discount: 0,
   },
@@ -101,6 +109,7 @@ const desserts: ListItemData[] = [
     category: "desserts",
     img: Cake8,
     name: "Red Velvet Cake",
+    size: "200 g",
     price: 7,
     discount: 0,
   },
@@ -109,6 +118,7 @@ const desserts: ListItemData[] = [
     category: "desserts",
     img: Cake9,
     name: "Chocolate Cake",
+    size: "200 g",
     price: 6,
     discount: 0,
   },
@@ -117,6 +127,7 @@ const desserts: ListItemData[] = [
     category: "desserts",
     img: Cake10,
     name: "Raspberry Tartlet",
+    size: "150 g",
     price: 7,
     discount: 0,
   },
@@ -125,6 +136,7 @@ const desserts: ListItemData[] = [
     category: "desserts",
     img: Cake11,
     name: "Fruit Tartlet",
+    size: "150 g",
     price: 8,
     discount: 2,
   },
@@ -133,6 +145,7 @@ const desserts: ListItemData[] = [
     category: "desserts",
     img: Cake12,
     name: "Cheesecake Tartlet",
+    size: "150 g",
     price: 6,
     discount: 0,
   },
@@ -144,6 +157,7 @@ const drinks: ListItemData[] = [
     category: "drinks",
     img: Soda13,
     name: "Coca Cola",
+    size: "330 ml",
     price: 2,
     discount: 0,
   },
@@ -152,6 +166,7 @@ const drinks: ListItemData[] = [
     category: "drinks",
     img: Soda14,
     name: "Coca Cola Zero",
+    size: "330 ml",
     price: 2,
     discount: 0,
   },
@@ -160,6 +175,7 @@ const drinks: ListItemData[] = [
     category: "drinks",
     img: Soda15,
     name: "Pepsi Cola",
+    size: "330 ml",
     price: 2,
     discount: 0,
   },
@@ -168,6 +184,7 @@ const drinks: ListItemData[] = [
     category: "drinks",
     img: Soda16,
     name: "Dr. Pepper",
+    size: "330 ml",
     price: 2,
     discount: 0,
   },
@@ -176,6 +193,7 @@ const drinks: ListItemData[] = [
     category: "drinks",
     img: Soda17,
     name: "Fanta",
+    size: "330 ml",
     price: 2,
     discount: 0,
   },
@@ -184,6 +202,7 @@ const drinks: ListItemData[] = [
     category: "drinks",
     img: Soda18,
     name: "Sprite",
+    size: "500 ml",
     price: 3,
     discount: 1,
   },

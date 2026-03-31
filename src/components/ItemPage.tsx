@@ -139,6 +139,7 @@ export const ItemPage = () => {
               <p className="text-gray-600 m-0">{item.ingredients}</p>
             </div>
           )}
+          <p className="font-bold">{item.size}</p>
         </div>
       </div>
       {loadingRelated ? (
