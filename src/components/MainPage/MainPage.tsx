@@ -1,4 +1,4 @@
-import { CarouselElement } from ".././CarouselElement";
+import { CarouselElement } from "./CarouselElement";
 import { DessertsList } from "./DessertsList";
 import { PizzaList } from "./PizzaList";
 import { DrinksList } from "./DrinksList";

@@ -38,13 +38,18 @@ export const CartPage = () => {
             <CartItem key={item.id} item={item} />
           ))}
       </div>
-      <div className="my-5 flex justify-between">
+      <div className="mt-5 mb-2 flex justify-between">
         <p className="text-2xl">
           Products in cart: <span className="font-bold">{totalItems}</span>
         </p>
         <p className="text-2xl">
           Total price: <span className="font-bold">{totalPrice}$</span>
         </p>
+      </div>
+      <div className="flex justify-end">
+        <button className="bg-[#f07e20] hover:bg-[#ffa734] text-white text-[16px] font-bold py-2 px-3 mb-5 w-31.5 rounded cursor-pointer transition-colors">
+          Order Now
+        </button>
       </div>
     </div>
   );

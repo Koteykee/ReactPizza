@@ -7,7 +7,7 @@ export const FavoritePage = () => {
   const clearFavorites = useFavoriteStore((state) => state.clearFavorites);
 
   return (
-    <div className="container">
+    <div className="container py-1">
       <div className="pt-10 mx-3 flex items-center justify-between mb-4">
         {favorite.length > 0 ? (
           <>

@@ -30,9 +30,11 @@ export const CartItem = ({ item }: ListItemProps) => {
 
           <img src={item.img} alt={item.name} className="h-40 object-contain" />
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-[28px] my-1">{item.name}</p>
+            <p className="font-semibold text-[20px] min-[1200px]:text-[28px] my-1">
+              {item.name}
+            </p>
             {item.ingredients && (
-              <p className="text-[18px] text-gray-600 my-0">
+              <p className="text-[14px] min-[1200px]:text-[18px] text-gray-600 my-0">
                 {item.ingredients}
               </p>
             )}

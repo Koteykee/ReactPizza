@@ -16,7 +16,7 @@ export const MenuButton = () => {
   };
 
   return (
-    <div>
+    <div className="mr-2">
       <Button
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"

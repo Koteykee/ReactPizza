@@ -18,7 +18,7 @@ export const PizzaMenu = () => {
   }
 
   return (
-    <div className="pt-10">
+    <div className="py-10">
       <List title="Pizza" items={pizzas} />
     </div>
   );
