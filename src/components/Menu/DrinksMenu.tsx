@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import LinearProgress from "@mui/material/LinearProgress";
 import { fetchDrinks, type ListItemData } from "../../api/products";
 import { List } from ".././MainPage/List/List";
 
@@ -13,13 +14,22 @@ export const DrinksMenu = () => {
     });
   }, []);
 
-  if (loading) {
-    return <div className="container">Loading...</div>;
-  }
-
   return (
-    <div className="py-10">
-      <List title="Drinks" items={drinks} />
+    <div className="container py-10!">
+      {loading ? (
+        <div className="px-2.5">
+          <LinearProgress
+            sx={{
+              backgroundColor: "#f07e20",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#ffa734",
+              },
+            }}
+          />
+        </div>
+      ) : (
+        <List title="Drinks" items={drinks} />
+      )}
     </div>
   );
 };

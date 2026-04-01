@@ -8,6 +8,7 @@ import {
 import { useCartStore } from "../stores/useCartStore";
 import { useFavoriteStore } from "../stores/useFavoriteStore";
 import { IconButton } from "@mui/material";
+import LinearProgress from "@mui/material/LinearProgress";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { List } from "./MainPage/List/List";
@@ -44,7 +45,19 @@ export const ItemPage = () => {
     });
   }, [item]);
 
-  if (!item) return <div>Loading...</div>;
+  if (!item)
+    return (
+      <div className="container px-4 py-10!">
+        <LinearProgress
+          sx={{
+            backgroundColor: "#f07e20",
+            "& .MuiLinearProgress-bar": {
+              backgroundColor: "#ffa734",
+            },
+          }}
+        />
+      </div>
+    );
 
   return (
     <div className="container flex flex-col gap-10 py-1">
@@ -143,7 +156,16 @@ export const ItemPage = () => {
         </div>
       </div>
       {loadingRelated ? (
-        <div>Loading...</div>
+        <div className="container">
+          <LinearProgress
+            sx={{
+              backgroundColor: "#f07e20",
+              "& .MuiLinearProgress-bar": {
+                backgroundColor: "#ffa734",
+              },
+            }}
+          />
+        </div>
       ) : (
         <List title={`More ${item.category}`} items={related.slice(0, 5)} />
       )}
