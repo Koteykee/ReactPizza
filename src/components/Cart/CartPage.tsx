@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useCartStore } from "../../stores/useCartStore";
 import { CartItem } from "./CartItem";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -31,14 +32,14 @@ export const CartPage = () => {
           Clear cart
         </button>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mx-2.5">
         {Object.values(cart)
           .filter((entry) => entry?.item)
           .map(({ item }) => (
             <CartItem key={item.id} item={item} />
           ))}
       </div>
-      <div className="mt-5 mb-2 flex justify-between">
+      <div className="mt-5 mx-2.5 mb-2 flex justify-between">
         <p className="text-2xl">
           Products in cart: <span className="font-bold">{totalItems}</span>
         </p>
@@ -46,10 +47,14 @@ export const CartPage = () => {
           Total price: <span className="font-bold">{totalPrice}$</span>
         </p>
       </div>
-      <div className="flex justify-end">
-        <button className="bg-[#f07e20] hover:bg-[#ffa734] text-white text-[16px] font-bold py-2 px-3 mb-5 w-31.5 rounded cursor-pointer transition-colors">
+      <div className="mx-2.5 flex justify-end">
+        <Link
+          to="/checkout"
+          style={{ textDecoration: "none" }}
+          className="bg-[#f07e20] hover:bg-[#ffa734] text-white text-[16px] font-bold py-2 px-3 mb-5 w-31.5 rounded cursor-pointer transition-colors text-center"
+        >
           Order Now
-        </button>
+        </Link>
       </div>
     </div>
   );

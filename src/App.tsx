@@ -10,6 +10,7 @@ import { DrinksMenu } from "./components/Menu/DrinksMenu";
 import { ItemPage } from "./components/ItemPage";
 import { FavoritePage } from "./components/FavoritePage";
 import { CartPage } from "./components/Cart/CartPage";
+import { CheckoutPage } from "./components/Cart/CheckoutPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/itemPage/:id" element={<ItemPage />} />
           <Route path="/favorite" element={<FavoritePage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
       </main>
       <Footer />
