@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextField from "@mui/material/TextField";
@@ -32,32 +32,55 @@ export const CheckoutPage = () => {
   const [promoStatus, setPromoStatus] = useState<"idle" | "success" | "error">(
     "idle",
   );
-
+  const promocodes: Record<string, { discount: number; message?: string }> = {
+    MINUS10: { discount: 10, message: "Promo applied" },
+    SUMMER5: { discount: 5, message: "Summer discount!" },
+  };
   const [promoMessage, setPromoMessage] = useState<string>("");
   const cart = useCartStore((state) => state.cart);
-  const subtotal = Object.values(cart).reduce(
-    (sum, { item, quantity }) =>
-      sum + (item.price - (item.discount ?? 0)) * quantity,
-    0,
-  );
-  const discount = promoStatus === "success" ? 10 : 0;
+  const subtotal = useMemo(() => {
+    return Object.values(cart).reduce(
+      (sum, { item, quantity }) =>
+        sum + (item.price - (item.discount ?? 0)) * quantity,
+      0,
+    );
+  }, [cart]);
+  const discount =
+    promoStatus === "success" && getValues("promo")
+      ? promocodes[getValues("promo")!.toUpperCase()].discount
+      : 0;
   const isFreeDelivery = subtotal - discount >= 25;
   const deliveryPrice = isFreeDelivery ? 0 : 5;
   const totalPrice = subtotal + deliveryPrice - discount;
-  const now = dayjs();
-  const nextHour = now.add(1, "hour");
-  const roundedMinutes = Math.ceil(nextHour.minute() / 15) * 15;
-  const initialDate = nextHour.minute(roundedMinutes).second(0);
-  const [date, setDate] = useState(initialDate);
+  const [now, setNow] = useState(dayjs());
+  const minDateTime = now.add(1, "hour");
+  const maxDateTime = now.add(7, "day");
+  const [initialDate] = useState(() => {
+    const now = dayjs();
+    const nextHour = now.add(1, "hour");
+    const roundedMinutes = Math.ceil(nextHour.minute() / 15) * 15;
+    return nextHour.minute(roundedMinutes).second(0);
+  });
+  const [date, setDate] = useState<dayjs.Dayjs>(initialDate);
+  const [muiError, setMuiError] = useState<string | null>(null);
+  const [dateError, setDateError] = useState<boolean>(false);
+  const hasError =
+    selectedDeliveryTime === "deliverBy" && (!!muiError || dateError);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(dayjs());
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const isDeliveryTimeValid = (selectedDate: dayjs.Dayjs) => {
-    const minTime = dayjs().add(1, "hour");
-    const maxTime = minTime.add(7, "day");
     const hour = selectedDate.hour();
 
     return (
-      selectedDate.isAfter(minTime) &&
-      selectedDate.isBefore(maxTime) &&
+      selectedDate.isAfter(minDateTime) &&
+      selectedDate.isBefore(maxDateTime) &&
       hour >= 11 &&
       hour <= 22
     );
@@ -65,13 +88,13 @@ export const CheckoutPage = () => {
 
   const handleApplyPromo = async () => {
     const isValid = await trigger("promo");
-
     if (!isValid) return;
 
-    const promo = getValues("promo");
-    if (promo === "MINUS10") {
+    const promo = getValues("promo")?.toUpperCase();
+
+    if (promo && promocodes[promo]) {
       setPromoStatus("success");
-      setPromoMessage("Promo applied");
+      setPromoMessage(promocodes[promo].message || "Promo applied");
     } else {
       setPromoStatus("error");
       setPromoMessage("Invalid promo");
@@ -80,15 +103,27 @@ export const CheckoutPage = () => {
 
   const onSubmit = () => {
     if (selectedDeliveryTime === "deliverBy" && !isDeliveryTimeValid(date)) {
+      setDateError(true);
       alert("Invalid delivery time!");
       return;
     }
+    setDateError(false);
     alert("Successes");
   };
 
   useEffect(() => {
     trigger();
   }, [trigger]);
+
+  useEffect(() => {
+    if (selectedDeliveryTime === "deliverBy") {
+      setDateError(!isDeliveryTimeValid(date));
+    }
+  }, [date, now, selectedDeliveryTime]);
+
+  if (Object.keys(cart).length === 0) {
+    return <div className="pt-10 text-center text-2xl">Your cart is empty</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="container">
@@ -192,8 +227,8 @@ export const CheckoutPage = () => {
                 <DateTimePicker
                   label="Date & time"
                   value={date}
-                  minDateTime={initialDate}
-                  maxDateTime={initialDate.add(7, "day")}
+                  minDateTime={minDateTime}
+                  maxDateTime={maxDateTime}
                   shouldDisableTime={(time, view) => {
                     if (view === "hours") {
                       const hour = time.hour();
@@ -202,8 +237,23 @@ export const CheckoutPage = () => {
                     return false;
                   }}
                   minutesStep={15}
-                  onChange={(newValue) => newValue && setDate(newValue)}
+                  onChange={(newValue) => {
+                    if (newValue) {
+                      setDate(newValue);
+                    }
+                  }}
+                  onError={(reason) => {
+                    setMuiError(reason);
+                  }}
                   slotProps={{
+                    textField: {
+                      error: hasError,
+                      helperText: hasError
+                        ? dateError
+                          ? "Invalid delivery time"
+                          : "Invalid date or time"
+                        : "",
+                    },
                     popper: {
                       sx: {
                         "& .Mui-selected": {
@@ -307,14 +357,10 @@ export const CheckoutPage = () => {
           <button
             type="submit"
             disabled={
-              !isValid ||
-              (selectedDeliveryTime === "deliverBy" &&
-                !isDeliveryTimeValid(date))
+              !isValid || (selectedDeliveryTime === "deliverBy" && dateError)
             }
             className={`text-center w-full px-4 py-2 font-medium rounded ${
-              !isValid ||
-              (selectedDeliveryTime === "deliverBy" &&
-                !isDeliveryTimeValid(date))
+              !isValid || (selectedDeliveryTime === "deliverBy" && dateError)
                 ? "bg-[#d3d3d3] cursor-not-allowed"
                 : "bg-[#f07e20] hover:bg-[#ffa734] text-white"
             }`}
