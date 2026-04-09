@@ -10,6 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
+import "dayjs/locale/en-gb";
 import { useCartStore } from "../../stores/useCartStore";
 import { CheckoutItem } from "./CheckoutItem";
 import { checkoutSchema, type CheckoutFormData } from "./checkout.schema";
@@ -223,7 +224,10 @@ export const CheckoutPage = () => {
               Deliver by
             </button>
             {selectedDeliveryTime === "deliverBy" && (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale="en-gb"
+              >
                 <DateTimePicker
                   label="Date & time"
                   value={date}

@@ -5,7 +5,7 @@ import { List } from ".././MainPage/List/List";
 
 export const DessertsMenu = () => {
   const [desserts, setDesserts] = useState<ListItemData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetchDesserts().then((data) => {

@@ -244,6 +244,18 @@ export const fetchProductById = (
   });
 };
 
+export const fetchProductsByName = (query: string): Promise<ListItemData[]> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(
+        allProducts.filter((item) =>
+          item.name.toLowerCase().includes(query.toLowerCase()),
+        ),
+      );
+    }, 500);
+  });
+};
+
 export const fetchByCategory = (category: Category) => {
   return new Promise<ListItemData[]>((resolve) => {
     setTimeout(() => {

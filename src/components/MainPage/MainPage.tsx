@@ -13,7 +13,7 @@ export const MainPage = () => {
   const [desserts, setDesserts] = useState<ListItemData[]>([]);
   const [drinks, setDrinks] = useState<ListItemData[]>([]);
   const [pizzas, setPizzas] = useState<ListItemData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     Promise.all([fetchDesserts(), fetchDrinks(), fetchPizzas()]).then(
