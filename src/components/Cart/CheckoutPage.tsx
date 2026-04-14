@@ -125,7 +125,7 @@ export const CheckoutPage = () => {
   if (Object.keys(cart).length === 0) {
     return (
       <div className="pt-10 text-center text-2xl font-bold">
-        Your cart is empty
+        Your cart is empty.
       </div>
     );
   }
