@@ -21,9 +21,9 @@ export const FavoritePage = () => {
             </button>
           </>
         ) : (
-          <h2 className="text-2xl font-bold">
+          <div className="text-2xl font-bold text-center">
             You don't have any favorites yet.
-          </h2>
+          </div>
         )}
       </div>
       <List title="" items={favorite} />
