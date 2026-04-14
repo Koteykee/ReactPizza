@@ -21,11 +21,7 @@ export const FavoritePage = () => {
             </button>
           </>
         ) : (
-<<<<<<< HEAD
           <div className="text-2xl font-bold text-center">
-=======
-          <h2 className="text-2xl font-bold text-center">
->>>>>>> 8758cf94e9161a405a3a66749d508340659f550c
             You don't have any favorites yet.
           </div>
         )}
