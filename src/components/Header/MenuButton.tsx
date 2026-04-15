@@ -41,7 +41,12 @@ export const MenuButton = () => {
         <MenuIcon />
         Menu
       </Button>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        disableScrollLock
+      >
         <MenuItem
           component={Link}
           to="/pizza"

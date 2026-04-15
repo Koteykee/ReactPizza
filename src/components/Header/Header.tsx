@@ -10,6 +10,7 @@ import {
 import Logo from "../../assets/Pizza-logo.png";
 import { MenuButton } from "./MenuButton";
 import { SearchBar } from "./SearchBar";
+import { UserButton } from "./UserButton";
 
 export const Header = () => {
   const favoritesCount = useFavoriteStore((state) => state.favorites.length);
@@ -80,6 +81,7 @@ export const Header = () => {
               <ShoppingCartIcon sx={{ fontSize: 32 }} />
             </IconButton>
           </Badge>
+          <UserButton />
         </div>
       </div>
     </nav>
