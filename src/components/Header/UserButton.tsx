@@ -12,7 +12,7 @@ export const UserButton = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [authMode, setAuthMode] = useState<AuthMode>(null);
-  const user = useAuthStore((state) => state.user);
+  const currentUserId = useAuthStore((state) => state.currentUserId);
   const logout = useAuthStore((state) => state.logout);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +26,7 @@ export const UserButton = () => {
   return (
     <div className="mr-2">
       <IconButton onClick={handleClick}>
-        {user ? (
+        {currentUserId !== null ? (
           <AccountCircleIcon sx={{ fontSize: 32 }} />
         ) : (
           <LoginIcon sx={{ fontSize: 32 }} />
@@ -46,8 +46,8 @@ export const UserButton = () => {
         }}
         disableScrollLock
       >
-        {!user ? (
-          <>
+        {!currentUserId ? (
+          <div>
             <MenuItem
               onClick={() => {
                 setAuthMode("login");
@@ -64,14 +64,21 @@ export const UserButton = () => {
             >
               Register
             </MenuItem>
-          </>
+          </div>
         ) : (
-          <>
+          <div>
             <MenuItem component={Link} to="/profile" onClick={handleClose}>
               Profile
             </MenuItem>
-            <MenuItem onClick={logout}>Logout</MenuItem>
-          </>
+            <MenuItem
+              onClick={() => {
+                logout();
+                handleClose();
+              }}
+            >
+              Logout
+            </MenuItem>
+          </div>
         )}
       </Menu>
       <AuthModals mode={authMode} onClose={() => setAuthMode(null)} />

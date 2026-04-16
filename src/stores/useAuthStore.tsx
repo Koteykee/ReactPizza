@@ -1,24 +1,79 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-interface User {
-  name: string;
-}
+import type { User } from "./useUserStore";
 
 interface AuthStore {
-  user: User | null;
-  login: (user: User) => void;
+  users: User[];
+  currentUserId: number | null;
+  login: (
+    email: string,
+    password: string,
+  ) => {
+    success: boolean;
+    message?: string;
+  };
+  register: (
+    email: string,
+    password: string,
+  ) => {
+    success: boolean;
+    message?: string;
+  };
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set) => ({
-      user: null,
+    (set, get) => ({
+      users: [],
+      currentUserId: null,
 
-      login: (user) => set({ user }),
+      logout: () => {
+        set({
+          currentUserId: null,
+        });
+      },
 
-      logout: () => set({ user: null }),
+      login: (email, password) => {
+        const { users } = get();
+
+        const user = users.find(
+          (u) => u.email === email && u.password === password,
+        );
+
+        if (!user) {
+          return { success: false, message: "Wrong email or password" };
+        }
+
+        set({
+          currentUserId: user.id,
+        });
+
+        return { success: true };
+      },
+
+      register: (email, password) => {
+        const { users } = get();
+
+        const existingUser = users.find((u) => u.email === email);
+
+        if (existingUser) {
+          return { success: false, message: "User already exists" };
+        }
+
+        const newUser: User = {
+          id: Date.now(),
+          email,
+          password,
+        };
+
+        set({
+          users: [...users, newUser],
+          currentUserId: newUser.id,
+        });
+
+        return { success: true };
+      },
     }),
     {
       name: "auth-storage",

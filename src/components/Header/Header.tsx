@@ -45,7 +45,7 @@ export const Header = () => {
             className="flex items-center gap-2 cursor-pointer text-black group"
           >
             <img src={Logo} alt="Pizza Logo" className="w-16 rounded-full" />
-            <div className="leading-none">
+            <div className="leading-none max-[992px]:hidden">
               <p className="text-[24px] font-semibold my-1 group-hover:underline">
                 Pizza Slice
               </p>
