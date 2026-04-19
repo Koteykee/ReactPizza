@@ -1,32 +1,44 @@
 import { create } from "zustand";
+import { useAuthStore } from "./useAuthStore";
 
 export interface User {
   id: number;
   email: string;
   password: string;
   name?: string;
+  phone?: string;
   address?: string;
+  apartment?: string;
+  entrance?: string;
+  floor?: string;
+  intercom?: string;
 }
 
 interface UserStore {
-  getUserProfile: () => User | null;
+  getUserProfile: (userId: number) => User | null;
+  updateUserProfile: (userId: number, data: Partial<User>) => void;
 }
 
 export const useUserStore = create<UserStore>(() => ({
-  getUserProfile: () => {
-    const data = localStorage.getItem("auth-storage");
-    if (!data) return null;
+  getUserProfile: (userId) => {
+    const users = useAuthStore.getState().users;
+    return users.find((u) => u.id === userId) || null;
+  },
 
-    try {
-      const parsed = JSON.parse(data);
-      const state = parsed.state ?? parsed;
+  updateUserProfile: (userId, data) => {
+    const auth = useAuthStore.getState();
 
-      const users = state.users ?? [];
-      const currentUserId = state.currentUserId ?? null;
+    const updatedUsers = auth.users.map((u) =>
+      u.id === userId ? { ...u, ...data } : u,
+    );
 
-      return users.find((u: User) => u.id === currentUserId) || null;
-    } catch {
-      return null;
-    }
+    const newState = {
+      users: updatedUsers,
+      currentUserId: auth.currentUserId,
+    };
+
+    useAuthStore.setState(newState);
+
+    localStorage.setItem("auth-storage", JSON.stringify(newState));
   },
 }));
