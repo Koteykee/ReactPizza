@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { useAuthStore } from "./useAuthStore";
+import { loadFromStorage } from "./useAuthStore";
 
 export interface User {
   id: number;
@@ -19,26 +19,25 @@ interface UserStore {
   updateUserProfile: (userId: number, data: Partial<User>) => void;
 }
 
+const USERS_DB = "users-db";
+
 export const useUserStore = create<UserStore>(() => ({
   getUserProfile: (userId) => {
-    const users = useAuthStore.getState().users;
+    const { users } = loadFromStorage();
     return users.find((u) => u.id === userId) || null;
   },
 
   updateUserProfile: (userId, data) => {
-    const auth = useAuthStore.getState();
+    const { users } = loadFromStorage();
 
-    const updatedUsers = auth.users.map((u) =>
+    const updatedUsers = users.map((u) =>
       u.id === userId ? { ...u, ...data } : u,
     );
 
     const newState = {
       users: updatedUsers,
-      currentUserId: auth.currentUserId,
     };
 
-    useAuthStore.setState(newState);
-
-    localStorage.setItem("auth-storage", JSON.stringify(newState));
+    localStorage.setItem(USERS_DB, JSON.stringify(newState));
   },
 }));

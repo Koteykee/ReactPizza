@@ -9,7 +9,8 @@ export const profileSchema = z.object({
   phone: z
     .string()
     .trim()
-    .regex(/^\+?[0-9\s\-()]{7,20}$/, {
+    .transform((val) => (val === "" ? undefined : val))
+    .refine((val) => !val || /^\+?[0-9\s\-()]{7,20}$/.test(val), {
       message: "Invalid phone number",
     })
     .optional(),

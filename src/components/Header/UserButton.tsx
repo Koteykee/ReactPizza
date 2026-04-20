@@ -1,5 +1,5 @@
 import { useState, type MouseEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import {
   Login as LoginIcon,
@@ -14,6 +14,7 @@ export const UserButton = () => {
   const [authMode, setAuthMode] = useState<AuthMode>(null);
   const currentUserId = useAuthStore((state) => state.currentUserId);
   const logout = useAuthStore((state) => state.logout);
+  const navigate = useNavigate();
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +22,11 @@ export const UserButton = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   return (
@@ -72,8 +78,8 @@ export const UserButton = () => {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                logout();
                 handleClose();
+                handleLogout();
               }}
             >
               Logout

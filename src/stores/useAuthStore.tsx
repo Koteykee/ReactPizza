@@ -1,8 +1,8 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { User } from "./useUserStore";
 
 interface AuthStore {
-  users: User[];
   currentUserId: number | null;
   login: (
     email: string,
@@ -15,92 +15,76 @@ interface AuthStore {
   logout: () => void;
 }
 
-const STORAGE_KEY = "auth-storage";
+const USERS_DB = "users-db";
 
-const saveToStorage = (state: {
-  users: User[];
-  currentUserId: number | null;
-}) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+const saveToUsers = (users: User[]) => {
+  localStorage.setItem(USERS_DB, JSON.stringify({ users }));
 };
 
-const loadFromStorage = (): { users: User[]; currentUserId: number | null } => {
-  const data = localStorage.getItem(STORAGE_KEY);
+export const loadFromStorage = (): { users: User[] } => {
+  const data = localStorage.getItem(USERS_DB);
 
-  if (!data) return { users: [], currentUserId: null };
+  if (!data) return { users: [] };
 
   try {
     const parsed = JSON.parse(data);
-
-    return {
-      users: parsed.users ?? [],
-      currentUserId: parsed.currentUserId ?? null,
-    };
+    return { users: parsed.users ?? [] };
   } catch {
-    return { users: [], currentUserId: null };
+    return { users: [] };
   }
 };
 
-export const useAuthStore = create<AuthStore>((set, get) => {
-  const initial = loadFromStorage();
+export const useAuthStore = create<AuthStore>()(
+  persist(
+    (set) => ({
+      currentUserId: null,
 
-  return {
-    ...initial,
+      login: (email, password) => {
+        const { users } = loadFromStorage();
+        const user = users.find(
+          (u) => u.email === email && u.password === password,
+        );
 
-    login: (email, password) => {
-      const user = get().users.find(
-        (u) => u.email === email && u.password === password,
-      );
+        if (!user) {
+          return { success: false, message: "Wrong email or password" };
+        }
 
-      if (!user) {
-        return { success: false, message: "Wrong email or password" };
-      }
+        set({ currentUserId: user.id });
 
-      const newState = {
-        users: get().users,
-        currentUserId: user.id,
-      };
+        return { success: true };
+      },
 
-      set(newState);
-      saveToStorage(newState);
+      register: (email, password) => {
+        const { users } = loadFromStorage();
 
-      return { success: true };
+        const exists = users.find((u) => u.email === email);
+
+        if (exists) {
+          return { success: false, message: "User already exists" };
+        }
+
+        const newUser: User = {
+          id: Date.now(),
+          email,
+          password,
+        };
+
+        saveToUsers([...users, newUser]);
+
+        set({ currentUserId: newUser.id });
+
+        return { success: true };
+      },
+
+      logout: () => {
+        set({ currentUserId: null });
+      },
+    }),
+    {
+      name: "auth-storage",
+      partialize: (state) => ({
+        currentUserId: state.currentUserId,
+      }),
     },
-
-    register: (email, password) => {
-      const users = get().users;
-
-      const exists = users.find((u) => u.email === email);
-
-      if (exists) {
-        return { success: false, message: "User already exists" };
-      }
-
-      const newUser: User = {
-        id: Date.now(),
-        email,
-        password,
-      };
-
-      const newState = {
-        users: [...users, newUser],
-        currentUserId: newUser.id,
-      };
-
-      set(newState);
-      saveToStorage(newState);
-
-      return { success: true };
-    },
-
-    logout: () => {
-      const newState = {
-        users: get().users,
-        currentUserId: null,
-      };
-
-      set(newState);
-      saveToStorage(newState);
-    },
-  };
-});
+  ),
+);
