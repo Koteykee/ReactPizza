@@ -22,7 +22,6 @@ export const CheckoutItem = ({ item }: ListItemProps) => {
               DISCOUNT
             </span>
           )}
-
           <img src={item.img} alt={item.name} className="h-20 object-contain" />
           <div className="flex flex-col gap-1">
             <p className="font-semibold text-[18px] my-1">{item.name}</p>

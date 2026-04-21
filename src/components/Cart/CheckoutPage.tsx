@@ -11,6 +11,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
+import { useAuthStore } from "../../stores/useAuthStore";
+import { useUserStore } from "../../stores/useUserStore";
 import { useCartStore } from "../../stores/useCartStore";
 import { CheckoutItem } from "./CheckoutItem";
 import { checkoutSchema, type CheckoutFormData } from "./checkout.schema";
@@ -21,11 +23,14 @@ export const CheckoutPage = () => {
     handleSubmit,
     trigger,
     getValues,
+    reset,
     formState: { errors, isValid },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     mode: "onChange",
   });
+  const currentUserId = useAuthStore((s) => s.currentUserId);
+  const getUserProfile = useUserStore((s) => s.getUserProfile);
   const [selected, setSelected] = useState<string>("Card online");
   const [selectedDeliveryTime, setSelectedDeliveryTime] = useState<
     "now" | "deliverBy"
@@ -103,14 +108,58 @@ export const CheckoutPage = () => {
   };
 
   const onSubmit = () => {
+    if (!currentUserId) return;
+
     if (selectedDeliveryTime === "deliverBy" && !isDeliveryTimeValid(date)) {
       setDateError(true);
       alert("Invalid delivery time!");
       return;
     }
+
+    const order = {
+      id: Date.now(),
+      userId: currentUserId,
+      items: Object.values(cart).map(({ item, quantity }) => ({
+        id: Date.now() + item.id,
+        productId: item.id,
+        price: item.price,
+        quantity,
+      })),
+      total: totalPrice,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existing = localStorage.getItem("orders-db");
+    const parsed = existing ? JSON.parse(existing) : { orders: [] };
+
+    const updated = {
+      orders: [...parsed.orders, order],
+    };
+
+    localStorage.setItem("orders-db", JSON.stringify(updated));
     setDateError(false);
-    alert("Successes");
+    useCartStore.getState().clearCart();
+    alert("Order placed!");
   };
+
+  useEffect(() => {
+    if (!currentUserId) return;
+
+    const user = getUserProfile(currentUserId);
+
+    if (user) {
+      reset({
+        name: user.name || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        apartment: user.apartment || "",
+        entrance: user.entrance || "",
+        floor: user.floor || "",
+        intercom: user.intercom || "",
+        email: user.email || "",
+      });
+    }
+  }, [currentUserId, getUserProfile, reset]);
 
   useEffect(() => {
     trigger();
